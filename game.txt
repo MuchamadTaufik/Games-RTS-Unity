@@ -1,0 +1,66 @@
+question block :
+
+using System.Collections;
+using UnityEngine;
+
+public class QuestionBlock : MonoBehaviour
+{
+
+    public float bounceHeight = 0.5f;
+    public float bounceSpeed = 4f;
+
+    private Vector2 originalPosition;
+    private bool camBounce = true;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        originalPosition = transform.localPosition;
+    }
+
+    private void QuestionBlockBounce() {
+        if (camBounce) {
+            camBounce = false;
+            StartCoroutine(Bounce());
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    IEnumerator Bounce() {
+        while (true)
+        {
+            transform.localPosition = new Vector2 (transform.localPosition.x, transform.localPosition.y + bounceSpeed * Time.deltaTime);
+
+            if (transform.localPosition.y >= originalPosition.y + bounceHeight)
+                break;
+
+            yield return null;
+        }
+
+        while (true)
+        {
+            transform.localPosition = new Vector2 (transform.localPosition.x, transform.localPosition.y - bounceSpeed * Time.deltaTime);
+            
+            if (transform.localPosition.y <= originalPosition.y) {
+                transform.localPosition = originalPosition;
+                break;
+            }
+
+            yield return null;
+        }
+    }
+}
+
+
+
+Player :
+if (hitRay.collider.tag == "QuestionBlock") {
+                hitRay.collider.GetComponent<QuestionBlock>().QuestionBlockBounce();
+            }
+
+(di no 196)
